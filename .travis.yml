@@ -2,6 +2,11 @@ language: rust
 rust:
   - stable
   - beta
+addons:
+  apt:
+    packages:
+    - libsdl2-dev
+    - libasound2-dev
 script:
   - cargo build --verbose --all
   - cargo test --verbose --all
