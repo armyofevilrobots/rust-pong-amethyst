@@ -3,14 +3,10 @@ extern crate amethyst;
 mod sprites;
 use crate::pong::sprites::load_sprite_sheet;
 
-use amethyst::assets::{AssetStorage, Loader};
-use amethyst::core::transform::{Transform, TransformBundle};
+use amethyst::core::transform::Transform;
 use amethyst::ecs::prelude::{Component, DenseVecStorage};
 use amethyst::prelude::*;
-use amethyst::renderer::{
-    Camera, Flipped, PngFormat, Projection, SpriteRender, SpriteSheet, SpriteSheetFormat,
-    SpriteSheetHandle, Texture, TextureMetadata,
-};
+use amethyst::renderer::{Camera, Flipped, Projection, SpriteRender, SpriteSheetHandle};
 
 pub const BALL_VELOCITY_X: f32 = 75.0;
 pub const BALL_VELOCITY_Y: f32 = 50.0;
@@ -29,8 +25,10 @@ impl SimpleState for Pong {
         let sprite_sheet_handle = load_sprite_sheet(world);
 
         world.register::<Paddle>();
+        world.register::<Ball>();
 
-        initialise_paddles(world, sprite_sheet_handle);
+        initialise_ball(world, sprite_sheet_handle.clone());
+        initialise_paddles(world, sprite_sheet_handle.clone());
         initialise_camera(world);
     }
 }
@@ -115,5 +113,26 @@ pub struct Ball {
 }
 
 impl Component for Ball {
-    type Storage = DenseVecStorage<self>;
+    type Storage = DenseVecStorage<Self>;
+}
+
+fn initialise_ball(world: &mut World, sprite_sheet_handle: SpriteSheetHandle) {
+    let mut local_transform = Transform::default();
+    local_transform.set_xyz(ARENA_WIDTH / 2.0, ARENA_HEIGHT / 2.0, 0.0);
+
+    //Assign the sprite...
+    let sprite_render = SpriteRender {
+        sprite_sheet: sprite_sheet_handle,
+        sprite_number: 1,
+    };
+
+    world
+        .create_entity()
+        .with(sprite_render)
+        .with(Ball {
+            radius: BALL_RADIUS,
+            velocity: [BALL_VELOCITY_X, BALL_VELOCITY_Y],
+        })
+        .with(local_transform)
+        .build();
 }

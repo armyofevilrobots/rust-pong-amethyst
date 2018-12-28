@@ -8,9 +8,7 @@ use amethyst::{
     core::transform::TransformBundle,
     input::InputBundle,
     prelude::*,
-    renderer::{
-        DisplayConfig, DrawFlat, DrawFlat2D, Event, Pipeline, PosNormTex, RenderBundle, Stage,
-    },
+    renderer::{DisplayConfig, DrawFlat2D, Pipeline, RenderBundle, Stage},
     utils::application_root_dir,
 };
 
@@ -43,7 +41,13 @@ fn main() -> amethyst::Result<()> {
         .with_bundle(RenderBundle::new(pipe, Some(config)).with_sprite_sheet_processor())?
         .with_bundle(TransformBundle::new())?
         .with_bundle(input_bundle)?
-        .with(systems::PaddleSystem, "paddle_system", &["input_system"]);
+        .with(systems::PaddleSystem, "paddle_system", &["input_system"])
+        .with(systems::MoveBallsSystem, "ball_system", &[])
+        .with(
+            systems::BounceSystem,
+            "collision_system",
+            &["paddle_system", "ball_system"],
+        );
 
     let mut game = Application::new("./", Pong, game_data)?;
 
