@@ -32,6 +32,9 @@ impl<'s> System<'s> for BounceSystem {
 
             // Bounce at the paddles.
             for (paddle, paddle_transform) in (&paddles, &transforms).join() {
+                // Originally it tried to turn centroid and size into
+                // some weird hybrid of pixel rank positioning and +Y->UP
+                // positioning. Needless to say it was confusing and broken.
                 let paddle_x = paddle_transform.translation().x; // - paddle.width * 0.5;
                 let paddle_y = paddle_transform.translation().y; // - paddle.height * 0.5;
 
@@ -48,10 +51,6 @@ impl<'s> System<'s> for BounceSystem {
                     paddle_y - ((paddle.height / 2.0) + ball.radius),
                     paddle_x + ((paddle.width / 2.0) + ball.radius),
                     paddle_y + ((paddle.height / 2.0) + ball.radius),
-                    // paddle_x - ball.radius,
-                    // paddle_y + paddle.height + ball.radius,
-                    // paddle_x + ball.radius,
-                    // paddle_y - paddle.height - ball.radius,
                 ) {
                     if paddle.side == Side::Left && ball.velocity[0] < 0.0 {
                         ball.velocity[0] = -ball.velocity[0];
