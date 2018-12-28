@@ -32,21 +32,26 @@ impl<'s> System<'s> for BounceSystem {
 
             // Bounce at the paddles.
             for (paddle, paddle_transform) in (&paddles, &transforms).join() {
-                let paddle_x = paddle_transform.translation().x - paddle.width * 0.5;
-                let paddle_y = paddle_transform.translation().y - paddle.height * 0.5;
+                let paddle_x = paddle_transform.translation().x; // - paddle.width * 0.5;
+                let paddle_y = paddle_transform.translation().y; // - paddle.height * 0.5;
 
                 // To determine whether the ball has collided with a paddle, we create a larger
                 // rectangle around the current one, by subtracting the ball radius from the
                 // lowest coordinates, and adding the ball radius to the highest ones. The ball
                 // is then within the paddle if its centre is within the larger wrapper
                 // rectangle.
+
                 if point_in_rect(
                     ball_x,
                     ball_y,
-                    paddle_x - ball.radius,
-                    paddle_y - ball.radius,
-                    paddle_x + paddle.width + ball.radius,
-                    paddle_y + paddle.height + ball.radius,
+                    paddle_x - ((paddle.width / 2.0) + ball.radius),
+                    paddle_y - ((paddle.height / 2.0) + ball.radius),
+                    paddle_x + ((paddle.width / 2.0) + ball.radius),
+                    paddle_y + ((paddle.height / 2.0) + ball.radius),
+                    // paddle_x - ball.radius,
+                    // paddle_y + paddle.height + ball.radius,
+                    // paddle_x + ball.radius,
+                    // paddle_y - paddle.height - ball.radius,
                 ) {
                     if paddle.side == Side::Left && ball.velocity[0] < 0.0 {
                         ball.velocity[0] = -ball.velocity[0];
