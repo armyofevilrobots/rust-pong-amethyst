@@ -3,8 +3,7 @@ os:
 - linux
 - osx
 rust:
-- stable
-- beta
+  - stable
 cache: cargo
 addons:
   apt:
