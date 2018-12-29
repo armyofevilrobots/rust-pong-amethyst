@@ -1,0 +1,7 @@
+Copyright 2018 ArmyOfEvilRobots
+
+Licensed under the the MIT license <http://opensource.org/licenses/MIT>.
+This software may not be copied, modified, or distributed except according to those terms.
+
+Contains parts of the Pong tutorial from <https://github.com/amethyst/amethyst/tree/master/book>.
+Vendored code is copyrighted by the relevant authors, and licensed according to: https://github.com/amethyst/amethyst/blob/master/COPYING
